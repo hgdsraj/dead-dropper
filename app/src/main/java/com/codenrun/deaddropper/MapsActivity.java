@@ -1,7 +1,11 @@
 package com.codenrun.deaddropper;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +19,11 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import static android.R.attr.defaultValue;
 
 public class MapsActivity extends AppCompatActivity
         implements
@@ -135,13 +144,44 @@ public class MapsActivity extends AppCompatActivity
     // Save coordinates and bring user to drop form
     public void deployDrop(View v) {
         prompt.setText("Deploying drop...");
-        //Stuff
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+
+        Intent intent = new Intent(this, DeployDropActivity.class);
+        intent.putExtra("lat", latitude);
+        intent.putExtra("long", longitude);
+        startActivityForResult(intent, 1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        prompt.setText("OnActivityResult called.");
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String dropName = data.getStringExtra("name");
+                String dropDesc = data.getStringExtra("desc");
+                double latitude = data.getDoubleExtra("latitude", defaultValue);
+                double longitude = data.getDoubleExtra("longitude", defaultValue);
+
+                // Add a marker at current location
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude, longitude))
+                        .title(dropName)
+                        .snippet(dropDesc));
+                prompt.setText("Marker " + dropName + " added.");
+            }
+        } else {
+            prompt.setText("requestCode != 1");
+        }
     }
 
     // Prompt user for coordinates of drop
     public void markDrop(View v) {
         prompt.setText("Marking drop...");
-        //Dialog?
+        //Intent intent = new Intent(this, MarkDropActivity.class);
+        //startActivityForResult(intent, 2);
     }
 
 }
