@@ -172,16 +172,26 @@ public class MapsActivity extends AppCompatActivity
                         .snippet(dropDesc));
                 prompt.setText("Marker " + dropName + " added.");
             }
+        } else if (requestCode == 2){
+            if (resultCode == RESULT_OK) {
+                double latitude = data.getDoubleExtra("lat", defaultValue);
+                double longitude = data.getDoubleExtra("long", defaultValue);
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude, longitude))
+                        .title("Available drop")
+                        .snippet(""));
+                prompt.setText("New marker added.");
+            }
         } else {
-            prompt.setText("requestCode != 1");
+            prompt.setText("requestCode invalid.");
         }
     }
 
     // Prompt user for coordinates of drop
     public void markDrop(View v) {
         prompt.setText("Marking drop...");
-        //Intent intent = new Intent(this, MarkDropActivity.class);
-        //startActivityForResult(intent, 2);
+        Intent intent = new Intent(this, MarkDropActivity.class);
+        startActivityForResult(intent, 2);
     }
 
 }

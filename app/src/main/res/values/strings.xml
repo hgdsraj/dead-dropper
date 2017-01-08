@@ -3,6 +3,8 @@
     <string name="title_activity_maps">Dead Dropper</string>
     <string name="name_field">Drop name</string>
     <string name="desc_field">Drop location description</string>
+    <string name="lat_field">Latitude</string>
+    <string name="long_field">Longitude</string>
 
     <!--    Permissions    -->
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
