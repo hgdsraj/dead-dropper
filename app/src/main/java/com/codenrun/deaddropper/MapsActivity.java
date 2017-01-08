@@ -1,22 +1,20 @@
 package com.codenrun.deaddropper;
 
-import android.*;
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends AppCompatActivity
         implements
@@ -39,6 +37,13 @@ public class MapsActivity extends AppCompatActivity
 
     private GoogleMap mMap;
 
+    // Instantiate buttons
+    Button deployDropButton;
+    Button markDropButton;
+
+    // Instatiate textview
+    TextView prompt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,13 @@ public class MapsActivity extends AppCompatActivity
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // Assign buttons
+        deployDropButton = (Button) findViewById(R.id.deployDropButton);
+        markDropButton = (Button) findViewById(R.id.markDropButton);
+
+        // Assign prompt
+        prompt = (TextView) findViewById(R.id.prompt);
     }
 
     @Override
@@ -114,6 +126,22 @@ public class MapsActivity extends AppCompatActivity
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
+    /**
+     * Button onClick methods
+     */
+
+    // Save coordinates and bring user to drop form
+    public void deployDrop(View v) {
+        prompt.setText("Deploying drop...");
+        //Stuff
+    }
+
+    // Prompt user for coordinates of drop
+    public void markDrop(View v) {
+        prompt.setText("Marking drop...");
+        //Dialog?
     }
 
 }
